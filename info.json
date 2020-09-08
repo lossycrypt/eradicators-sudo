@@ -1,0 +1,14 @@
+{
+  "title"            : "Eradicator's /sudo",
+  "name"             : "eradicators-sudo",
+  "author"           : "eradicator",
+  "version"          : "3.0.8",
+  "factorio_version" : "1.0",
+  "contact"          : "Check the mod portal \"Discussions\" tab (link below).",
+  "license"          : "Creative Commons Attribution-NoDerivatives 4.0 International License",
+  "description"      : "/sudo is a command line helper utilty that aims to make common tasks easier by providing shortcuts to commonly used api features. \n\nIt is a modding, development and administration tool NOT inteded for normal play. Use \"/sudo help\" to get started. I strongly recommended deactivating it once you're done. Prolonged use can cause sloth, desyncs, cheating-addiction and/or desire to write your own mods.",
+  "dependencies"     : [
+    "base >= 1.0",
+    "(?) eradicators-library >= 3.1.5"
+  ]
+}

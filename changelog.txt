@@ -1,0 +1,110 @@
+---------------------------------------------------------------------------------------------------
+Version: 3.0.7
+Date: 2020-09-09
+  Internal:
+    - Added help_to_table() directly into sudo (instead of just eradicators-library).
+    - Added deep_value_analysis() which depends on help_to_table.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.6
+Date: 2020-09-01
+  Internal:
+    - Changed factorio version to 1.0
+    - Added save() because autosaves can no longer be manually overwritten in-game. Wtf.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.5
+Date: 2020-??-??
+  Internal:
+    - Forgot to write down what changed *cough*.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.3
+Date: 2020-03-12
+  Major Features:
+    - Added automatic loading of eradicators-library. If installed all functions will be available.
+  Minor Features:
+    - Added "version" command that prints the current version and status of erlib.
+    - Added global config value SUDO__ALWAYS_CLEAR to clear the console before every command (default: true)
+    - Added fps(), ups() to easier change game speed.
+    - Added hide_gui()
+  Bugfixes:
+    - Fixed crash when execution failed without an error message.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.2
+Date: 2020-03-09
+  Minor Features:
+    - Added blip(), a small circle renderer for testing.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.1
+Date: 2020-02-28
+  Bugfixes:
+    - Raise a better error when calling get_power_per_cycle() without an entity.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.0
+Date: 2020-02-27
+  Internal:
+    - Rewritten to be easier extensible.
+    - Sudo now runs directly inside the hosting mods environment to make it more useful when loaded into other mods. So be careful.
+  Minor Features:
+    - More accurately distinguish between syntax and execution errors.
+    - Better handling of multiple return values.
+    - Added heal()
+    - Added typo suggestions to /sudo help <command>
+---------------------------------------------------------------------------------------------------
+Version: 2.2.6
+Date: 2019-10-17
+  Minor Features:
+    - Added energize()
+    - Added remove_events()
+  Internal:
+    - Added basic environment metatable protection to strengthen the sandbox
+---------------------------------------------------------------------------------------------------
+Version: 2.2.5
+Date: 2019-04-26
+  Minor Features:
+    - Added typo suggestions to give()
+---------------------------------------------------------------------------------------------------
+Version: 2.2.4
+Date: 2019-04-26
+  Minor Features:
+    - Added pause(). Turns on and off the tick processing.
+    - Added tick(). Advances the game for a number of ticks, then pauses again.
+    - Changed whatis() to accept more flexible arguments (only radius, position, entity...)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.3
+Date: 2019-04-26
+  Bugfixes:
+    - Migrated "player" to "character" as required by factorio 0.17.35+
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2019-04-26
+  Major Features:
+    - Added /sudo help <command> support for quick lookup.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2019-04-24
+  Major Features:
+    - First official mod-portal release.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2019-04-22
+  Major Features:
+    - Added catching and printing of multiple return values.
+    - Rewrote tell() to work standalone and have nicer output formatting.
+  Minor Features:
+    - Added generate_seperator()
+    - Added bserp() and lserp() shortucts to serpent.
+    - Added car()
+    - Added show_groups() and show_subgroups()
+    - Added respawn() and reincarnate()
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2019-04-08
+  Major Features:
+    - Added list of commands with "/sudo help".
+  Minor Features:
+    - Updated list of items for dev() to 0.17 (i.e. no more axes, but heat-interface, etc).
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2019-04-07
+  Major Features:
+    - Made a stand-alone version.
+    - Created this changelog.
