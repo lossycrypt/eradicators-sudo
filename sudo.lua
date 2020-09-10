@@ -149,7 +149,7 @@ else
 ---- HELPER FUNCTIONS ------------------------------------------------------------------------------
 
 --print to player AND stdout
-local function Print(p,msg) p.print(msg) print(msg) end
+local function Print(p,msg) p.print(msg) print('sudo> '..msg) end
 
 local function toggle(tbl,key,onoff,msg,negate)
   if     (onoff == 'on' ) or (onoff == true ) then tbl[key] = (not negate) and true or false
@@ -1121,8 +1121,15 @@ Function {
         end
       end
     print('#####################',game.tick)
+    local function prtl(key,ok,err)
+      err = (err and err:match'(.*)%s+stack traceback' or (err:gsub('\n',''))) or ''
+      print(("%s%"..(n-#key).."s | %-8s | %s"):format(key,'',ok,err))
+      end
+    prtl('Key','Writable','Error Message')
+    -- print('Key'                                          | Success | Error Message
+    print(('-'):rep(72))
     for ok,_ in pairs(results) do for _,dat in pairs(results[ok]) do
-      print(("'%s'%"..(n-#dat[1]).."s, %-6s %s"):format(dat[1],'',ok,dat[2]:match'(.*)%s+stack traceback'))
+      prtl(dat[1],ok,dat[2])
       end end
     print('end of analysis')
     end
