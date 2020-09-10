@@ -1123,7 +1123,7 @@ Function {
     print('#####################',game.tick)
     local function prtl(key,ok,err)
       err = (err and err:match'(.*)%s+stack traceback' or (err:gsub('\n',''))) or ''
-      print(("%s%"..(n-#key).."s | %-8s | %s"):format(key,'',ok,err))
+      print(("'%s'%"..(n-#key).."s, | %-8s | %s"):format(key,'',ok,err))
       end
     prtl('Key','Writable','Error Message')
     -- print('Key'                                          | Success | Error Message
