@@ -50,11 +50,16 @@ local plat = {} -- name → true
 local help = {dict={},list={},tutorial={}} -- name　→　definition (dyn+func)
 local stdout,stdmsg --temporary output functions (print,p.print)
 
---the core *might* be available, i don't want to require it. because that would
+--the core *might* be available, i don't want to make it mandatory. because that would
 --a) make porting sudo after breaking changes more annoying and b) make sudo not standalone
 --we're also not allowed to use the EventManger of the library
-local status,Core = pcall(require,'__eradicators-library__/erlib/library.lua')
-if status then Core = Core(_ENV,{strict_mode=true}); Core.Install(env) end
+
+--[[ERLIB 4.0 Temporary Hackfix]]
+  -- local status,Core = pcall(require,'__eradicators-library__/erlib/library.lua')
+  local status,Core = pcall(require,'__eradicators-library__/erlib/main.lua')
+  -- if status then Core = Core(_ENV,{strict_mode=true}); Core.Install(env) end
+  if status then env.erlib = Core() end
+--[[END (ERLIB 4.0 Temporary Hackfix)]]
 
 --often used patterns
 help.descriptions = {
