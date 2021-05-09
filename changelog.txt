@@ -1,4 +1,25 @@
 ---------------------------------------------------------------------------------------------------
+Version: 3.1.1
+Date: 2021-05-09
+  Minor Features:
+    - give() now takes an optional amount as second parameter.
+---------------------------------------------------------------------------------------------------
+Version: 3.1.0
+Date: 2020-12-18
+  Minor Features:
+    - Updated to factorio base version 1.1. Looks like /sudo isn't affected by any of the scripting changes.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.10
+Date: 2020-09-29
+  Internal:
+    - Dev() mode now has infinite distance reach instead of only 10000 tiles.
+    - Eradicators-library 4.x full Core is now installed if available.
+---------------------------------------------------------------------------------------------------
+Version: 3.0.9
+Date: 2020-09-20
+  Internal:
+    - Adjusted eradicators-library 4.x integration as it grows.
+---------------------------------------------------------------------------------------------------
 Version: 3.0.8
 Date: 2020-09-16
   Internal:
@@ -14,7 +35,7 @@ Version: 3.0.6
 Date: 2020-09-01
   Internal:
     - Changed factorio version to 1.0
-    - Added save() because autosaves can no longer be manually overwritten in-game. Wtf.
+    - Added save() because autosaves can no longer be manually overwritten in-game. Wtf. (Addendum from the future: There's an option in "The Rest" settings to allow it again.)
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.5
 Date: 2020-??-??

@@ -56,9 +56,16 @@ local stdout,stdmsg --temporary output functions (print,p.print)
 
 --[[ERLIB 4.0 Temporary Hackfix]]
   -- local status,Core = pcall(require,'__eradicators-library__/erlib/library.lua')
-  local status,Core = pcall(require,'__eradicators-library__/erlib/main.lua')
+  local status,Core = pcall(require,'__eradicators-library__/erlib/Core.lua')
   -- if status then Core = Core(_ENV,{strict_mode=true}); Core.Install(env) end
-  if status then env.erlib = Core() end
+  if status then
+    -- env.erlib = Core()
+    local erlib = Core() -- extract main module table
+    erlib.Core.install_to_env(env,{auto_lock=false})
+    -- env.EventManager = require(
+      -- '__eradicators-library__/erlib/factorio/EventManager/EventManager-10')()
+    -- env.EventManager.disable_desync_protection()
+    end
 --[[END (ERLIB 4.0 Temporary Hackfix)]]
 
 --often used patterns
@@ -466,9 +473,10 @@ Function {
     if env.p.character then
       p.character_running_speed_modifier        = 2.5
       p.character_mining_speed_modifier         = 100
-      p.character_reach_distance_bonus          = 10000
-      p.character_build_distance_bonus          = 10000
-      p.character_resource_reach_distance_bonus = 10000
+      p.character_reach_distance_bonus          = 2000000
+      p.character_build_distance_bonus          = 2000000
+      p.character_resource_reach_distance_bonus = 2000000
+      p.character_item_drop_distance_bonus      = 2000000
       env.give'armor'
       env.give'robots'
       env.charge()
@@ -564,18 +572,16 @@ Function {
   
 Function {
   names = {'give'},
-  call = '(item_name)',
-  usage = {'@item_name: String. Name of any LuaItemPrototype or one of: "eei","eeis","loaders","robots","pipes","chests","armor"'},
-  equivalent = 'game.player.insert(item_name)',
-  description = 'Gives you a stack of an item.',
-  f = function(arg)
+  call = '(item_name, item_count)',
+  usage = {
+    '@item_name: String. Name of any LuaItemPrototype or one of: "eei","eeis","loaders","robots","pipes","chests","armor"',
+    '@item_count: Number. How many (default: one stack).'
+    },
+  equivalent = 'game.player.insert{name = item_name, count = item_count}',
+  description = 'Gives you a stack of an item, or the specified amount.',
+  f = function(arg, count)
     local p = env.p
-    if     arg == 'eei'     then p.insert 'electric-energy-interface'
-    -- elseif arg == 'axe'     then p.insert 'steel-axe' --0.16
-    elseif arg == 'loaders' then p.insert 'express-loader'
-    elseif arg == 'robots'  then p.insert 'construction-robot'
-    elseif arg == 'pipes'   then p.insert 'infinity-pipe' --0.17
-    elseif arg == 'chests'  then 
+    if arg == 'chests'  then
       p.insert 'infinity-chest'
       for _,mode in pairs{'passive-provider','storage','requester','buffer','active-provider'} do
         local chest_name = 'er:infinity-chest-'..mode
@@ -598,18 +604,31 @@ Function {
         ['battery-mk2-equipment']           = 2,
         ['personal-roboport-mk2-equipment'] = 8, })
         do for i=1,count do env.armor.grid.put{name=name} end end
-    elseif game.item_prototypes[arg] then
-      p.insert(arg)
     else
-      p.print('Unknown item name.')
-      local possible_items = {}
-      for _,item in pairs(game.item_prototypes) do
-        if item.name:find(arg) then
-          possible_items[#possible_items+1] = item.name
+      arg = ({
+        eei     = 'electric-energy-interface',
+        axe     = 'steel-axe'                , --0.16
+        loaders = 'express-loader'           , 
+        robots  = 'construction-robot'       , 
+        pipes   = 'infinity-pipe'            , --0.17
+        })[arg] or arg
+      if game.item_prototypes[arg] then
+        if count then 
+          p.insert{name = arg, count = count}
+        else
+          p.insert(arg) -- one stack
           end
-        end
-      if #possible_items > 0 then
-        p.print('Similar item names: '..table.concat(possible_items,', '))
+      else
+        p.print('Unknown item name.')
+        local possible_items = {}
+        for _,item in pairs(game.item_prototypes) do
+          if item.name:find(arg) then
+            possible_items[#possible_items+1] = item.name
+            end
+          end
+        if #possible_items > 0 then
+          p.print('Similar item names: '..table.concat(possible_items,', '))
+          end
         end
       end
     end
@@ -991,6 +1010,48 @@ Function {
     
     env.p.print(string.format('<%s> consumes %.2fMJ per cycle.',this.name,cycle_length*power_per_second/1000^2))
     
+    end
+  }
+  
+Function {
+  names = {'solve_petroleum_cracking'},
+  call = '()',
+  description = 'Solves advanced+heavy+light cracking for petroleum output. (Bullshit code)',
+  f = function()
+    -- kein Bock den Scheiß richtig zu machen :<
+    -- low-quality bullshit code
+    local H, L, P = 'heavy-oil', 'light-oil', 'petroleum-gas'
+  
+    local raw2heavy    = game.recipe_prototypes['advanced-oil-processing']
+    local light2petrol = game.recipe_prototypes['light-oil-cracking']
+    local heavy2light  = game.recipe_prototypes['heavy-oil-cracking']
+    
+    local petrol_value = {
+      [P] = 1
+      }
+    
+    local function get_amount(arr,name)
+      for i=1,#arr do if arr[i].name == name then
+        return arr[i].amount
+        end end
+      end
+    
+    local function get_value (recipe, from, to)
+      return get_amount(recipe.products,to)/get_amount(recipe.ingredients,from)
+      end
+      
+    petrol_value[L] = get_value(light2petrol, L, P)
+    petrol_value[H] = get_value(heavy2light , H, L) * petrol_value[L]
+    
+    local r = 0
+    for _,product in ipairs(raw2heavy.products) do
+      if petrol_value[product.name] then
+        r = r + petrol_value[product.name]*product.amount
+        end
+      end
+    r = r / raw2heavy.energy -- energy is in seconds
+    game.print(r..'/s')
+    return r
     end
   }
     

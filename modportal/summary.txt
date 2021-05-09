@@ -1,0 +1,3 @@
+﻿/sudo is a command line helper utilty that aims to make common tasks easier by providing shortcuts to commonly used api features. 
+
+It is a modding, development and administration tool NOT intended for normal play. Use "/sudo help" to get started. I strongly recommended deactivating it once you're done. Prolonged use can cause sloth, desyncs, cheating-addiction and/or desire to write your own mods.
